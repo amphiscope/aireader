@@ -18,6 +18,12 @@ AIReader 的做法是：打开一份 HTML 材料时**完整保留它自带的样
   不在数据库、IndexedDB 或 localStorage 里留隐藏副本——**HTML 和 JSON 一起移动，讨论记录就跟着走**。
 - **正文内练习与批改**：识别材料里的编程/批改任务，编辑器、提交版本与批改结果留在正文原位，不挤进右侧问答栏。
 
+## 下载
+
+[**AIReader 0.1.0 · macOS (Apple Silicon)**](https://github.com/DKmiyan/aireader/releases/latest)
+
+ad-hoc 签名、未公证：首次打开请右键 →「打开」，或 `xattr -dr com.apple.quarantine /Applications/AIReader.app`。
+
 ## 现状
 
 - macOS 本机应用（Apple Silicon），通过 `localhost` 使用。
