@@ -6,7 +6,7 @@
 
 ## 下载与安装
 
-[下载最新版本](https://github.com/DKmiyan/aireader/releases/latest) · macOS / Apple Silicon
+[下载最新版本](https://github.com/amphiscope/aireader/releases/latest) · macOS / Apple Silicon
 
 1. 下载 DMG，打开后将 `AIReader.app` 拖进「应用程序」；也可下载 ZIP 解压安装。
 2. 应用使用 ad-hoc 签名，尚未完成 Apple 公证。如果被系统拦截，确认来源后到「系统设置 → 隐私与安全性」选择「仍要打开」。
