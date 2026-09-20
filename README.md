@@ -1,62 +1,19 @@
 # AIReader
 
-**本地优先、上下文感知的 HTML 阅读器。**
+在 Mac 上阅读 HTML、Markdown 和 PDF，选中文字即可带着上下文向 AI 提问。HTML 的排版、公式和交互会保留，问答与标注保存在文档旁边。
 
-读技术材料时，把整篇文档投喂给模型既贵又容易串味；只贴一段话，模型又不知道这段在讲什么。
-AIReader 的做法是：打开一份 HTML 材料时**完整保留它自带的样式、脚本、公式与图表交互**，
-同时只把**当前选区、所在标题路径、当前逻辑节点与必要邻文**编译成一份有限的模型上下文交给模型。
+也可以在 Worker 中管理本机终端、连接远程 tmux，查看本机 Claude / Codex 的对话记录。
 
-问的不是「这篇文档」，是「我正在读的这一段」。
+## 下载与安装
 
-## 它做什么
+[下载最新版本](https://github.com/DKmiyan/aireader/releases/latest) · macOS / Apple Silicon
 
-- **原样呈现**：HTML 在不带 `allow-same-origin` 的 iframe 沙箱里运行，作者写的 CSS / JS / KaTeX / 交互图表全部保留。
-- **按位置取上下文**：划词后出现 `Ask AI`，自动带上选区、标题路径、当前逻辑节点与必要邻文；
-  右侧有上下文检查器，可以看到这次到底把什么发给了模型。
-- **结构导航**：自动抽取文档结构，识别并折叠 HTML 自带的左侧目录（释放原 grid/flex 占位），工具栏随时恢复。
-- **伴生文件即事实源**：每份 HTML 配一个同目录、同基名的 `.aireader.json`，保存标记、完整问答与正文练习状态。
-  不在数据库、IndexedDB 或 localStorage 里留隐藏副本——**HTML 和 JSON 一起移动，讨论记录就跟着走**。
-- **正文内练习与批改**：识别材料里的编程/批改任务，编辑器、提交版本与批改结果留在正文原位，不挤进右侧问答栏。
+1. 下载 DMG，打开后将 `AIReader.app` 拖进「应用程序」；也可下载 ZIP 解压安装。
+2. 应用使用 ad-hoc 签名，尚未完成 Apple 公证。如果被系统拦截，确认来源后到「系统设置 → 隐私与安全性」选择「仍要打开」。
+3. 打开本地文档即可阅读。使用 AI 时，在 Reader 中选择「API 模型 → 配置模型」，填入自己的服务信息；Codex 订阅通道的要求见随包安装说明。
 
-## 下载
-
-[**AIReader 0.1.0 · macOS (Apple Silicon)**](https://github.com/DKmiyan/aireader/releases/latest)
-
-ad-hoc 签名、未公证：首次打开请右键 →「打开」，或 `xattr -dr com.apple.quarantine /Applications/AIReader.app`。
-
-## 现状
-
-- macOS 本机应用（Apple Silicon），通过 `localhost` 使用。
-- 一次打开一份 HTML，按依赖图读取它实际引用的本地资源，**不扫描同目录其他文档**。
-- 远程 URL、完整 Wiki 检索、agent 命令执行尚未进入首版。
-- **源码暂未公开**，仓库目前提供说明文档与构建版本。
-
-## 模型配置
-
-密钥由 daemon 自读，**不进入渲染进程、worker 或 CLI 输出**，文件须保持 `0600`：
-
-```bash
-mkdir -p ~/.config/aireader && chmod 700 ~/.config/aireader
-cat > ~/.config/aireader/aireader.env <<'ENV'
-DEEPSEEK_API_KEY=your-key-here
-DEEPSEEK_BASE_URL=https://api.deepseek.com
-DEEPSEEK_MODEL=deepseek-v4-flash
-ENV
-chmod 600 ~/.config/aireader/aireader.env
-```
-
-同一文件里可另配 `MOONSHOT_API_KEY`、`ZHIPU_API_KEY` 及各自可选的 `*_BASE_URL` / `*_MODEL`。
-自建的 OpenAI 兼容端点通过 `VLLM_BASE_URL` + `VLLM_MODEL` 显式启用（`VLLM_API_KEY` 可选，
-视觉端点另设 `VLLM_VISION=true`）。
-
-**未配置任何 key 时，应用会明确进入上下文演示模式**——仍可浏览、取上下文、查看检查器，只是不产生模型回答。
-
-## 写给 AIReader 的 HTML
-
-生成阅读材料的工具可以遵循一份创作规范，让阅读器 100% 确定地识别目录、公式与分节上下文：
-标题带稳定 id、目录容器盖 `data-aireader-toc="true"`、内嵌一份 `data-aireader-context` 上下文清单、
-公式用离线 KaTeX 保留可恢复的 TeX 源。不遵循也能打开，只是部分能力降级。
+当前提供的是 `0.1.7-rc.7` 候选版，仍在调试。更新内容、已知问题和 SHA256 校验文件见下载页。模型账号及额度需自备。
 
 ## 许可
 
-保留所有权利。可自由下载使用构建版本；未授权再分发、反编译或商用。
+源码暂未公开，本仓库只提供说明和安装包。保留所有权利。可自由下载使用构建版本；未授权再分发、反编译或商用。
